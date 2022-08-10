@@ -1,7 +1,7 @@
 #define DEBOUNCE_TIME 50
 #define PRESSING_TIME 300
 
-SoftwareSerial mySoftwareSerial(7, 6); // RX, TX
+//SoftwareSerial mySoftwareSerial(7, 6); // RX, TX
 
 byte buttons[] = { 2, 3, 4, 5, 8 };
 
