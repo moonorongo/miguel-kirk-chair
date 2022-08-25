@@ -1,7 +1,6 @@
 #define DEBOUNCE_TIME 50
 #define PRESSING_TIME 300
 
-//byte buttons[] = { 2, 3, 4, 5, 8 };
 byte buttons[] = { A0, A1, A2, A3, A5 };
 
 unsigned long ellapsedTime;
@@ -10,10 +9,6 @@ byte lastKeyPressed = 255;
 byte i = 0;
 
 void setupSwitches() {
-  // configure pins as input
-//  for(i = 0; i < 5; i++) {
-//    pinMode(buttons[i], INPUT_PULLUP);
-//  }
 
   ellapsedTime = millis();
   // 0: nothing press; 1: pressed; 2: released; 

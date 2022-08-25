@@ -26,22 +26,25 @@ RGB rgbValues[] = { {255, 255, 0}, {0, 255, 255}, {255, 0, 255}, {255, 255, 255}
 //           002.mp3 (press action)
 
 void playSoundPress(byte keyPressed) {
-  myDFPlayer.playFolder(keyPressed + 1, 2);  //play specific mp3 in SD:/15/004.mp3; Folder Name(1~99); File Name(1~255)
+//  myDFPlayer.playFolder(keyPressed + 1, 2);  //play specific mp3 in SD:/15/004.mp3; Folder Name(1~99); File Name(1~255)
 //  Serial.print("Keypressed: ");
 //  Serial.println(keyPressed);
 }
 
 void playSoundReleased(byte keyPressed) {
-  myDFPlayer.playFolder(keyPressed + 1, 1);  //play specific mp3 in SD:/15/004.mp3; Folder Name(1~99); File Name(1~255)
+  //myDFPlayer.playFolder(keyPressed + 1, 1);  //play specific mp3 in SD:/15/004.mp3; Folder Name(1~99); File Name(1~255)
+//  Serial.print("Key released: ");
+//  Serial.println(keyPressed);
 
   setColor(rgbValues[keyPressed].r, rgbValues[keyPressed].g, rgbValues[keyPressed].b);
 }
 
 void setup()
 {
+  setupLed();
   setupSwitches();
   setupRgb();
-  
+//Serial.begin(115200);  
   mySoftwareSerial.begin(9600);
   myDFPlayer.begin(mySoftwareSerial);
 
@@ -55,5 +58,6 @@ void setup()
 void loop()
 {
   loopSwitches();
+  loopLed();
 //  loopRgb();
 }
