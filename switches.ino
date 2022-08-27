@@ -9,18 +9,32 @@ byte lastKeyPressed = 255;
 byte i = 0;
 
 void setupSwitches() {
-
-  ellapsedTime = millis();
-  // 0: nothing press; 1: pressed; 2: released; 
-  keyStatus = 0;
   
+  ellapsedTime = millis();
+  keyStatus = 0;
+ 
 }
 
 void loopSwitches() {
+//  Serial.print("A0: ");
+//  Serial.print(analogRead(A0));
+//
+//  Serial.print(", A1: ");
+//  Serial.print(analogRead(A1));
+//
+//  Serial.print(", A2: ");
+//  Serial.print(analogRead(A2));
+//
+//  Serial.print(", A3: ");
+//  Serial.print(analogRead(A3));
+//
+//  Serial.print(", A5: ");
+//  Serial.println(analogRead(A5));
+  
   switch(keyStatus) {
     case 0: // read initial status
       for(i = 0; i < 5; i++) {
-        if(!analogRead(buttons[i])) {
+        if(analogRead(buttons[i]) < 512) {
           ellapsedTime = millis();
           keyStatus = 1;
           lastKeyPressed = i;
@@ -30,7 +44,7 @@ void loopSwitches() {
       break;
 
     case 1: // key press (debounce)
-      if(analogRead(buttons[lastKeyPressed])) { // if released key
+      if(analogRead(buttons[lastKeyPressed]) > 512) { // if released key
         if(millis() < ellapsedTime + DEBOUNCE_TIME) {
           keyStatus = 0;
           lastKeyPressed = 255;  
@@ -46,7 +60,7 @@ void loopSwitches() {
       break;
 
     case 3: // key still pressing
-      if(analogRead(buttons[lastKeyPressed])) { // if released key (after pressing time)
+      if(analogRead(buttons[lastKeyPressed]) > 512) { // if released key (after pressing time)
         keyStatus = 4;
       }
       break;

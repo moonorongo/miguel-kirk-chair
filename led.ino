@@ -1,3 +1,9 @@
+/*
+  pending: 
+    loop leeds (cuando esta iddle)
+
+    encender led correspondiente (cuando se pulsa un boton)
+*/
 
 byte leds[] = { 2, 3, 4, 5, 8 };
 unsigned long ellapsedTimeLed;
