@@ -7,16 +7,27 @@
 
 byte leds[] = { 2, 3, 4, 5, 8 };
 unsigned long ellapsedTimeLed;
-byte ledStatus = 0;
+byte ledStatus = 0; // 0: idle; 1 - 31: leds correspondientes
 byte j = 0;
+byte temp;
 
-void allLeds(byte status) {
-  // configure pins as output
+void logStatus() {
+    
+}
+
+void turnOn(byte number) {
   for(j = 0; j < 5; j++) {
-    if(status == 1) {
-      digitalWrite(leds[j], HIGH);
+    temp = 1 << j;
+    if(number & temp) {
+      digitalWrite(leds[j], HIGH);  
+      Serial.print("1");
     } else {
-      digitalWrite(leds[j], LOW);
+      digitalWrite(leds[j], LOW);  
+      Serial.print("0");
+    }
+
+    if(j == 4) {
+      Serial.println("");  
     }
   }
 }
@@ -34,12 +45,14 @@ void setupLed() {
 void loopLed() {
     if(millis() > ellapsedTimeLed + 500) {
         ellapsedTimeLed = millis();
-        if(ledStatus == 0) {
-          ledStatus = 1;  
-        } else {
-          ledStatus = 0;  
-        }
 
-        allLeds(ledStatus);
+        turnOn(ledStatus);
+        ledStatus++;
+        if(ledStatus == 32) {
+          ledStatus == 0;  
+        }
+      
     }
+
+
 }
