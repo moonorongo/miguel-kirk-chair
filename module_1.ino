@@ -31,9 +31,11 @@ void playSoundReleased(byte keyPressed) {
     myDFPlayer.stop();
     setColor(0,0,0);
     isPlaying = 0;
+    setLedStatus(0);
   } else {
     myDFPlayer.playFolder(keyPressed + 1, 1);  //play specific mp3 in SD:/15/004.mp3; Folder Name(1~99); File Name(1~255)
-    isPlaying = keyPressed + 1;  
+    isPlaying = keyPressed + 1;
+    setLedStatus(isPlaying);  
     setColor(rgbValues[keyPressed].r, rgbValues[keyPressed].g, rgbValues[keyPressed].b);
   }
 }
@@ -64,6 +66,7 @@ void loop()
     if(myDFPlayer.readType() == 5) {
       setColor(0,0,0);
       isPlaying = 0;
+      setLedStatus(0);
     }
   }
  
