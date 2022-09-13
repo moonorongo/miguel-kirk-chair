@@ -20,8 +20,8 @@
     4. Organizacion de la SD: 001 y 002 : pitidos, 023 a 033 en adelante: archivos de musica
 */
 
-DFRobotDFPlayerMini intercomPlayer;
-//DFRobotDFPlayerMini musicPlayer;
+//DFRobotDFPlayerMini intercomPlayer;
+DFRobotDFPlayerMini musicPlayer;
 
 byte isPlayingIntercomPlayer = 0; // (1) en el circuito, 24 arduino
 byte isPlayingMusicPlayer = 0;    // (2) en el circuito, 25 arduino
@@ -52,45 +52,36 @@ void playSoundReleased(byte lastKeyPressed) {
   }    
 }
 
-
+// Intercom
 void playIntercomPress() {
   // pitido inicial
-  intercomPlayer.playFolder(1, 1);
+//  intercomPlayer.playFolder(1, 1);
   isPlayingIntercomPlayer = 1;
 }
 
 
 void playIntercomReleased() {
   if(isPlayingIntercomPlayer != 0) {
-    intercomPlayer.stop();
+  //  intercomPlayer.stop();
     isPlayingIntercomPlayer = 0;
   } else {
     // random folder 004 - 014
-    intercomPlayer.playFolder(random(4, 15), 1);
+    //intercomPlayer.playFolder(random(4, 15), 1);
     isPlayingIntercomPlayer = 1;
   }
 }
 
-
+// Music Player
 void playMusicPress() {
-  //musicPlayer.playFolder(keyPressed + 1, 2);
+  musicPlayer.playFolder(2, 1);
   isPlayingMusicPlayer = 1;
-
-  Serial.println("Toca pitido");
-  Serial.println("Al finalizar toca una cancion al azar");
-  
 }
 
 void playMusicReleased() {
-//  if(isPlayingMusicPlayer != 0) {
-    //musicPlayer.stop();
-//    isPlayingMusicPlayer = 0;
-//  } else {
-    //musicPlayer.playFolder(keyPressed + 1, 1);
-    isPlayingMusicPlayer = 1;
-//  }
-    Serial.println("Frena el reproductor si esta tocando algo");
-    Serial.println("Toca Pitido de salida");
+  if(isPlayingMusicPlayer != 0) {
+    isPlayingMusicPlayer = 3; // pasa a estado "toca pitido salida"
+    musicPlayer.playFolder(3, 1);
+  }
 }
 
 
@@ -102,38 +93,46 @@ void setup()
   Serial1.begin(9600);
   Serial2.begin(9600);  
 
-  intercomPlayer.begin(Serial1);
-  intercomPlayer.EQ(DFPLAYER_EQ_NORMAL);
-  intercomPlayer.setTimeOut(500);
-  intercomPlayer.outputDevice(DFPLAYER_DEVICE_SD);
-  intercomPlayer.volume(20);  //Set volume value. From 0 to 30
+//  intercomPlayer.begin(Serial1);
+//  intercomPlayer.EQ(DFPLAYER_EQ_NORMAL);
+//  intercomPlayer.setTimeOut(500);
+//  intercomPlayer.outputDevice(DFPLAYER_DEVICE_SD);
+//  intercomPlayer.volume(20);  //Set volume value. From 0 to 30
 
-/*
   musicPlayer.begin(Serial2);
   musicPlayer.EQ(DFPLAYER_EQ_NORMAL);
   musicPlayer.setTimeOut(500);
   musicPlayer.outputDevice(DFPLAYER_DEVICE_SD);
   musicPlayer.volume(20);  //Set volume value. From 0 to 30
-*/  
 }
 
 void loop()
 {
+/*  
   if(intercomPlayer.available()) {
     // triggered on finish play
     if(intercomPlayer.readType() == 5) {
       isPlayingIntercomPlayer = 0;
     }
   }
-
-/*  
+*/
+ 
   if(musicPlayer.available()) {
     // triggered on finish play
     if(musicPlayer.readType() == 5) {
-      isPlayingMusicPlayer = 0;
+      if(isPlayingMusicPlayer == 1) { // si estaba tocando el pitido de entrada
+        isPlayingMusicPlayer = 2; // pasa a estado "toca musica"
+        // random folder 004 - 014 -> pasar a 015 - 025
+//        musicPlayer.playFolder(random(4, 15), 1);
+      } else if(isPlayingMusicPlayer == 2) { // si estaba tocando musica
+        isPlayingMusicPlayer = 3; // pasa a estado "toca pitido salida"
+//        musicPlayer.playFolder(3, 1);
+        musicPlayer.playFolder(random(15, 26), 1);
+      } else {
+        isPlayingMusicPlayer = 0;
+      }
     }
   }
-*/
 
   loopSwitches();
 }
