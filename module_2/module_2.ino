@@ -1,5 +1,5 @@
 #include "Arduino.h"
-//#include "DFRobotDFPlayerMini.h"
+#include "DFRobotDFPlayerMini.h"
 
 /* 
   Modulo 2: Intercom y reproductor de musica (ARDUINO MEGA con 2 reproductores MP3)
@@ -12,19 +12,19 @@
   Reproductor de musica
   ---------------------
     1. Al insertar una tarjeta se acciona un pulsador
-    2. primero reproduce un pitido (el mismo que el del intercom)
+    2. primero reproduce un pitido (diferente al intercom, 002)
     3. al finalizar la reproduccion del pitido comienza a reproducir la musica
        (se diferencia del anterior en que en el anterior reproduce al soltar, aqui al terminar)  
  
-    4. Al retirar la tarjeta (soltar el switch) frena la reproduccion y emite un pitido (diferente al anterior) 
+    4. Al retirar la tarjeta (soltar el switch) frena la reproduccion y emite un pitido (diferente al anterior 003) 
     4. Organizacion de la SD: 001 y 002 : pitidos, 023 a 033 en adelante: archivos de musica
 */
 
-//DFRobotDFPlayerMini intercomPlayer;
+DFRobotDFPlayerMini intercomPlayer;
 //DFRobotDFPlayerMini musicPlayer;
 
-byte isPlayingIntercomPlayer = 0;
-byte isPlayingMusicPlayer = 0;
+byte isPlayingIntercomPlayer = 0; // (1) en el circuito, 24 arduino
+byte isPlayingMusicPlayer = 0;    // (2) en el circuito, 25 arduino
 
 // <folder>/<filename>.mp3
 // folder: 01 .. 99
@@ -54,21 +54,21 @@ void playSoundReleased(byte lastKeyPressed) {
 
 
 void playIntercomPress() {
-  //intercomPlayer.playFolder(keyPressed + 1, 2);
+  // pitido inicial
+  intercomPlayer.playFolder(1, 1);
   isPlayingIntercomPlayer = 1;
-
-  Serial.println("Pitido inicial");
 }
 
+
 void playIntercomReleased() {
-  // if(isPlayingIntercomPlayer != 0) {
-    //intercomPlayer.stop();
-    // isPlayingIntercomPlayer = 0;
-//  } else {
-    //intercomPlayer.playFolder(keyPressed + 1, 1);
+  if(isPlayingIntercomPlayer != 0) {
+    intercomPlayer.stop();
+    isPlayingIntercomPlayer = 0;
+  } else {
+    // random folder 004 - 014
+    intercomPlayer.playFolder(random(4, 15), 1);
     isPlayingIntercomPlayer = 1;
-//  }
-  Serial.println("Tocando respuesta al azar");
+  }
 }
 
 
@@ -101,13 +101,14 @@ void setup()
   Serial.begin(9600);
   Serial1.begin(9600);
   Serial2.begin(9600);  
-/*
+
   intercomPlayer.begin(Serial1);
   intercomPlayer.EQ(DFPLAYER_EQ_NORMAL);
   intercomPlayer.setTimeOut(500);
   intercomPlayer.outputDevice(DFPLAYER_DEVICE_SD);
   intercomPlayer.volume(20);  //Set volume value. From 0 to 30
 
+/*
   musicPlayer.begin(Serial2);
   musicPlayer.EQ(DFPLAYER_EQ_NORMAL);
   musicPlayer.setTimeOut(500);
@@ -118,7 +119,6 @@ void setup()
 
 void loop()
 {
-/*  
   if(intercomPlayer.available()) {
     // triggered on finish play
     if(intercomPlayer.readType() == 5) {
@@ -126,6 +126,7 @@ void loop()
     }
   }
 
+/*  
   if(musicPlayer.available()) {
     // triggered on finish play
     if(musicPlayer.readType() == 5) {
@@ -133,5 +134,6 @@ void loop()
     }
   }
 */
+
   loopSwitches();
 }
