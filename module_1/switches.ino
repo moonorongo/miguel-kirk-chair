@@ -1,5 +1,5 @@
 #define DEBOUNCE_TIME 50
-#define PRESSING_TIME 300
+#define PRESSING_TIME 500
 
 byte buttons[] = { A0, A1, A2, A3, A5 };
 

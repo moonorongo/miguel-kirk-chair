@@ -15,10 +15,22 @@ void turnOn(byte number) {
   for(j = 0; j < 5; j++) {
     temp = 1 << j;
     if(number & temp) {
-      digitalWrite(leds[j], HIGH);  
+      // hack para el 2do led, que hace lo que se le ocurre
+      if(j==3) {
+        digitalWrite(leds[j], LOW);
+      } else {
+        digitalWrite(leds[j], HIGH);  
+      }
       Serial.print("1");
     } else {
-      digitalWrite(leds[j], LOW);  
+      // hack para el 2do led, que hace lo que se le ocurre
+      if(j==3) {
+        digitalWrite(leds[j], HIGH);
+      } else {
+        digitalWrite(leds[j], LOW);  
+      }
+
+//      digitalWrite(leds[j], LOW);  
       Serial.print("0");
     }
 
